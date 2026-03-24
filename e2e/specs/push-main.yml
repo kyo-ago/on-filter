@@ -1,0 +1,5 @@
+name: push-main
+on:
+  push:
+    branches:
+      - main
