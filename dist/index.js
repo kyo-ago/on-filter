@@ -36596,17 +36596,19 @@ exports.getChangedFilesFromGit = getChangedFilesFromGit;
 const core = __importStar(__nccwpck_require__(7484));
 const exec = __importStar(__nccwpck_require__(5236));
 const NULL_SHA = '0000000000000000000000000000000000000000';
+async function runGit(args) {
+    const chunks = [];
+    await exec.exec('git', args, {
+        listeners: {
+            stdout: (data) => chunks.push(data),
+        },
+    });
+    return Buffer.concat(chunks).toString();
+}
 async function getChangedFilesFromGit(before, after) {
     if (before === NULL_SHA || before === '') {
         core.debug('New branch detected (before is null SHA), listing all files');
-        let output = '';
-        await exec.exec('git', ['ls-tree', '-r', '--name-only', after], {
-            listeners: {
-                stdout: (data) => {
-                    output += data.toString();
-                },
-            },
-        });
+        const output = await runGit(['ls-tree', '-r', '--name-only', after]);
         const files = output
             .trim()
             .split('\n')
@@ -36614,14 +36616,7 @@ async function getChangedFilesFromGit(before, after) {
         core.debug(`All files in tree (${files.length}): ${JSON.stringify(files)}`);
         return files;
     }
-    let output = '';
-    await exec.exec('git', ['diff', '--name-only', `${before}...${after}`], {
-        listeners: {
-            stdout: (data) => {
-                output += data.toString();
-            },
-        },
-    });
+    const output = await runGit(['diff', '--name-only', `${before}...${after}`]);
     const files = output
         .trim()
         .split('\n')
