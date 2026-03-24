@@ -1,0 +1,40 @@
+{
+  "name": "on-filter",
+  "version": "1.0.0",
+  "description": "Use GitHub Actions on syntax as a job-level filter",
+  "main": "dist/index.js",
+  "scripts": {
+    "build": "ncc build src/main.ts -o dist --source-map --license licenses.txt",
+    "test": "jest",
+    "lint": "eslint src/ __tests__/",
+    "format": "prettier --write 'src/**/*.ts' '__tests__/**/*.ts'",
+    "format:check": "prettier --check 'src/**/*.ts' '__tests__/**/*.ts'",
+    "all": "npm run format && npm run lint && npm run test && npm run build"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/graffer-inc/on-filter"
+  },
+  "license": "MIT",
+  "dependencies": {
+    "@actions/core": "^1.10.1",
+    "@actions/exec": "^1.1.1",
+    "@actions/github": "^6.0.0",
+    "js-yaml": "^4.1.0",
+    "picomatch": "^4.0.2"
+  },
+  "devDependencies": {
+    "@types/jest": "^29.5.12",
+    "@types/js-yaml": "^4.0.9",
+    "@types/node": "^20.14.0",
+    "@types/picomatch": "^3.0.1",
+    "@typescript-eslint/eslint-plugin": "^7.0.0",
+    "@typescript-eslint/parser": "^7.0.0",
+    "@vercel/ncc": "^0.38.1",
+    "eslint": "^8.57.0",
+    "jest": "^29.7.0",
+    "prettier": "^3.3.0",
+    "ts-jest": "^29.1.4",
+    "typescript": "^5.4.0"
+  }
+}

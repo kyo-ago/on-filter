@@ -1,0 +1,45 @@
+name: CI
+on:
+  push:
+    branches: ['**']
+  pull_request:
+    branches: ['**']
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+          cache: 'npm'
+      - run: npm ci
+      - run: npm test
+      - run: npm run build
+      - name: Check dist is up to date
+        run: |
+          if [ "$(git diff --name-only dist/)" != "" ]; then
+            echo "dist/ is out of date. Run 'npm run build' and commit the changes."
+            exit 1
+          fi
+
+  integration-test:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Test push to main filter
+        uses: ./
+        id: push-main
+        with:
+          on: |
+            push:
+              branches: [main]
+      - name: Verify push-main result is a boolean string
+        run: |
+          result="${{ steps.push-main.outputs.result }}"
+          if [ "$result" != "true" ] && [ "$result" != "false" ]; then
+            echo "Unexpected result: $result"
+            exit 1
+          fi
+          echo "push-main result: $result"
