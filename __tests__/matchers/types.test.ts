@@ -1,27 +1,13 @@
 import { matchTypes } from '../../src/matchers/types';
+import { EventFilter } from '../../src/types';
 
-jest.mock('@actions/core', () => ({
-  debug: jest.fn(),
-}));
+jest.mock('@actions/core');
 
-describe('matchTypes', () => {
-  it('passes when no types filter', () => {
-    const result = matchTypes('opened', {});
-    expect(result.matched).toBe(true);
-  });
-
-  it('matches when action is in types', () => {
-    const result = matchTypes('opened', { types: ['opened', 'synchronize'] });
-    expect(result.matched).toBe(true);
-  });
-
-  it('does not match when action is not in types', () => {
-    const result = matchTypes('closed', { types: ['opened', 'synchronize'] });
-    expect(result.matched).toBe(false);
-  });
-
-  it('does not match when no action but types specified', () => {
-    const result = matchTypes(undefined, { types: ['opened'] });
-    expect(result.matched).toBe(false);
-  });
+test.each<[string | undefined, EventFilter, boolean]>([
+  ['opened', {}, true],
+  ['opened', { types: ['opened', 'synchronize'] }, true],
+  ['closed', { types: ['opened', 'synchronize'] }, false],
+  [undefined, { types: ['opened'] }, false],
+])('matchTypes(%s, filter) => matched=%s', (action, filter, expected) => {
+  expect(matchTypes(action, filter).matched).toBe(expected);
 });

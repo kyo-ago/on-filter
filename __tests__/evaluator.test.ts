@@ -1,9 +1,7 @@
 import { evaluate } from '../src/evaluator';
 import { ActionContext, OnFilter } from '../src/types';
 
-jest.mock('@actions/core', () => ({
-  debug: jest.fn(),
-}));
+jest.mock('@actions/core');
 
 jest.mock('../src/matchers/paths', () => ({
   matchPaths: jest.fn().mockResolvedValue({ matched: true, reason: 'mocked' }),

@@ -1,9 +1,7 @@
 import { matchBranches } from '../../src/matchers/branches';
-import { ActionContext } from '../../src/types';
+import { ActionContext, EventFilter } from '../../src/types';
 
-jest.mock('@actions/core', () => ({
-  debug: jest.fn(),
-}));
+jest.mock('@actions/core');
 
 function makePushContext(ref: string): ActionContext {
   return {
@@ -22,92 +20,43 @@ function makePrContext(baseRef: string): ActionContext {
   };
 }
 
-describe('matchBranches', () => {
-  it('passes when no branches filter', () => {
-    const result = matchBranches(makePushContext('refs/heads/main'), {});
-    expect(result.matched).toBe(true);
+it('passes when no branches filter', () => {
+  expect(matchBranches(makePushContext('refs/heads/main'), {}).matched).toBe(true);
+});
+
+it('returns not matched when ref is a tag', () => {
+  expect(matchBranches(makePushContext('refs/tags/v1.0'), { branches: ['main'] }).matched).toBe(
+    false
+  );
+});
+
+describe('push event', () => {
+  test.each<[string, EventFilter, boolean]>([
+    ['refs/heads/main', { branches: ['main'] }, true],
+    ['refs/heads/develop', { branches: ['main'] }, false],
+    ['refs/heads/feature/test', { branches: ['feature/**'] }, true],
+    ['refs/heads/release-v1', { branches: ['release-*'] }, true],
+    ['refs/heads/feature/test', { branches: ['feature*'] }, false],
+    ['refs/heads/releases/v1/patch', { branches: ['releases/**'] }, true],
+  ])('ref=%s => matched=%s', (ref, filter, expected) => {
+    expect(matchBranches(makePushContext(ref), filter).matched).toBe(expected);
   });
+});
 
-  describe('push event', () => {
-    it('matches exact branch name', () => {
-      const result = matchBranches(makePushContext('refs/heads/main'), {
-        branches: ['main'],
-      });
-      expect(result.matched).toBe(true);
-    });
-
-    it('does not match different branch', () => {
-      const result = matchBranches(makePushContext('refs/heads/develop'), {
-        branches: ['main'],
-      });
-      expect(result.matched).toBe(false);
-    });
-
-    it('matches wildcard pattern', () => {
-      const result = matchBranches(makePushContext('refs/heads/feature/test'), {
-        branches: ['feature/**'],
-      });
-      expect(result.matched).toBe(true);
-    });
-
-    it('matches single-star pattern', () => {
-      const result = matchBranches(makePushContext('refs/heads/release-v1'), {
-        branches: ['release-*'],
-      });
-      expect(result.matched).toBe(true);
-    });
-
-    it('single star does not match slashes', () => {
-      const result = matchBranches(makePushContext('refs/heads/feature/test'), {
-        branches: ['feature*'],
-      });
-      expect(result.matched).toBe(false);
-    });
-
-    it('double star matches deep paths', () => {
-      const result = matchBranches(makePushContext('refs/heads/releases/v1/patch'), {
-        branches: ['releases/**'],
-      });
-      expect(result.matched).toBe(true);
-    });
+describe('branches-ignore', () => {
+  test.each<[string, EventFilter, boolean]>([
+    ['refs/heads/temp-branch', { 'branches-ignore': ['temp-*'] }, false],
+    ['refs/heads/main', { 'branches-ignore': ['temp-*'] }, true],
+  ])('ref=%s => matched=%s', (ref, filter, expected) => {
+    expect(matchBranches(makePushContext(ref), filter).matched).toBe(expected);
   });
+});
 
-  describe('branches-ignore', () => {
-    it('excludes matching branch', () => {
-      const result = matchBranches(makePushContext('refs/heads/temp-branch'), {
-        'branches-ignore': ['temp-*'],
-      });
-      expect(result.matched).toBe(false);
-    });
-
-    it('includes non-matching branch', () => {
-      const result = matchBranches(makePushContext('refs/heads/main'), {
-        'branches-ignore': ['temp-*'],
-      });
-      expect(result.matched).toBe(true);
-    });
-  });
-
-  describe('pull_request event', () => {
-    it('matches base branch', () => {
-      const result = matchBranches(makePrContext('main'), {
-        branches: ['main'],
-      });
-      expect(result.matched).toBe(true);
-    });
-
-    it('does not match different base branch', () => {
-      const result = matchBranches(makePrContext('develop'), {
-        branches: ['main'],
-      });
-      expect(result.matched).toBe(false);
-    });
-  });
-
-  it('returns not matched when ref is a tag', () => {
-    const result = matchBranches(makePushContext('refs/tags/v1.0'), {
-      branches: ['main'],
-    });
-    expect(result.matched).toBe(false);
+describe('pull_request event', () => {
+  test.each<[string, EventFilter, boolean]>([
+    ['main', { branches: ['main'] }, true],
+    ['develop', { branches: ['main'] }, false],
+  ])('baseRef=%s => matched=%s', (baseRef, filter, expected) => {
+    expect(matchBranches(makePrContext(baseRef), filter).matched).toBe(expected);
   });
 });

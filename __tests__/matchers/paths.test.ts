@@ -1,9 +1,7 @@
 import { matchPaths } from '../../src/matchers/paths';
 import { ActionContext } from '../../src/types';
 
-jest.mock('@actions/core', () => ({
-  debug: jest.fn(),
-}));
+jest.mock('@actions/core');
 
 jest.mock('../../src/changed-files/api', () => ({
   getChangedFilesFromApi: jest.fn(),

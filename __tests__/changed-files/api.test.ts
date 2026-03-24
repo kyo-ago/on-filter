@@ -1,8 +1,6 @@
 import { getChangedFilesFromApi } from '../../src/changed-files/api';
 
-jest.mock('@actions/core', () => ({
-  debug: jest.fn(),
-}));
+jest.mock('@actions/core');
 
 const mockListFiles = jest.fn();
 jest.mock('@actions/github', () => ({

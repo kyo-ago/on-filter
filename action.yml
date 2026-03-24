@@ -12,5 +12,5 @@ outputs:
   result:
     description: '"true" if the current event matches the filter, "false" otherwise'
 runs:
-  using: 'node20'
+  using: 'node24'
   main: 'dist/index.js'

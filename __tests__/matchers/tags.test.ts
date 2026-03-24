@@ -1,9 +1,7 @@
 import { matchTags } from '../../src/matchers/tags';
-import { ActionContext } from '../../src/types';
+import { ActionContext, EventFilter } from '../../src/types';
 
-jest.mock('@actions/core', () => ({
-  debug: jest.fn(),
-}));
+jest.mock('@actions/core');
 
 function makeTagContext(ref: string): ActionContext {
   return {
@@ -13,67 +11,23 @@ function makeTagContext(ref: string): ActionContext {
   };
 }
 
-describe('matchTags', () => {
-  it('passes when no tags filter', () => {
-    const result = matchTags(makeTagContext('refs/heads/main'), {});
-    expect(result.matched).toBe(true);
-  });
+test.each<[string, EventFilter, boolean]>([
+  ['refs/heads/main', {}, true],
+  ['refs/tags/v1.0', { tags: ['v1.0'] }, true],
+  ['refs/tags/v2.0', { tags: ['v1.*'] }, false],
+  ['refs/tags/v1.2.3', { tags: ['v*'] }, true],
+  ['refs/heads/main', { tags: ['v*'] }, false],
+  ['refs/heads/main', { 'tags-ignore': ['v*'] }, true],
+  ['refs/tags/releases/v1/patch', { tags: ['releases/**'] }, true],
+])('matchTags(%s, filter) => matched=%s', (ref, filter, expected) => {
+  expect(matchTags(makeTagContext(ref), filter).matched).toBe(expected);
+});
 
-  it('matches exact tag name', () => {
-    const result = matchTags(makeTagContext('refs/tags/v1.0'), {
-      tags: ['v1.0'],
-    });
-    expect(result.matched).toBe(true);
-  });
-
-  it('does not match different tag', () => {
-    const result = matchTags(makeTagContext('refs/tags/v2.0'), {
-      tags: ['v1.*'],
-    });
-    expect(result.matched).toBe(false);
-  });
-
-  it('matches wildcard tag pattern', () => {
-    const result = matchTags(makeTagContext('refs/tags/v1.2.3'), {
-      tags: ['v*'],
-    });
-    expect(result.matched).toBe(true);
-  });
-
-  it('returns false when ref is not a tag but tags filter exists', () => {
-    const result = matchTags(makeTagContext('refs/heads/main'), {
-      tags: ['v*'],
-    });
-    expect(result.matched).toBe(false);
-  });
-
-  it('passes when ref is not a tag and only tags-ignore exists', () => {
-    const result = matchTags(makeTagContext('refs/heads/main'), {
-      'tags-ignore': ['v*'],
-    });
-    expect(result.matched).toBe(true);
-  });
-
-  describe('tags-ignore', () => {
-    it('excludes matching tag', () => {
-      const result = matchTags(makeTagContext('refs/tags/v0.1-alpha'), {
-        'tags-ignore': ['*-alpha'],
-      });
-      expect(result.matched).toBe(false);
-    });
-
-    it('includes non-matching tag', () => {
-      const result = matchTags(makeTagContext('refs/tags/v1.0'), {
-        'tags-ignore': ['*-alpha'],
-      });
-      expect(result.matched).toBe(true);
-    });
-  });
-
-  it('matches double star pattern for nested tags', () => {
-    const result = matchTags(makeTagContext('refs/tags/releases/v1/patch'), {
-      tags: ['releases/**'],
-    });
-    expect(result.matched).toBe(true);
+describe('tags-ignore', () => {
+  test.each<[string, EventFilter, boolean]>([
+    ['refs/tags/v0.1-alpha', { 'tags-ignore': ['*-alpha'] }, false],
+    ['refs/tags/v1.0', { 'tags-ignore': ['*-alpha'] }, true],
+  ])('ref=%s => matched=%s', (ref, filter, expected) => {
+    expect(matchTags(makeTagContext(ref), filter).matched).toBe(expected);
   });
 });
