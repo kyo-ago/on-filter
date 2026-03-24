@@ -1,0 +1,16 @@
+name: 'on-filter'
+description: 'Use GitHub Actions on syntax as a job-level filter'
+inputs:
+  on:
+    description: 'Filter condition in GitHub Actions on syntax (YAML string)'
+    required: true
+  token:
+    description: 'GitHub token for API access (used for pull_request paths filter)'
+    required: false
+    default: ${{ github.token }}
+outputs:
+  result:
+    description: '"true" if the current event matches the filter, "false" otherwise'
+runs:
+  using: 'node24'
+  main: 'dist/index.js'
