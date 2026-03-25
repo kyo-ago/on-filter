@@ -56,16 +56,26 @@ jobs:
             let detectedRun = null;
 
             while (Date.now() < deadline) {
-              const res = await github.rest.actions.listWorkflowRuns({
-                owner: context.repo.owner,
-                repo: context.repo.repo,
-                workflow_id: workflowId,
-                head_sha: context.sha,
-                event: context.eventName,
-                per_page: 10,
-              });
+              let runs = [];
+              try {
+                const res = await github.rest.actions.listWorkflowRuns({
+                  owner: context.repo.owner,
+                  repo: context.repo.repo,
+                  workflow_id: workflowId,
+                  head_sha: context.sha,
+                  event: context.eventName,
+                  per_page: 10,
+                });
+                runs = res.data.workflow_runs || [];
+              } catch (err) {
+                if (err.status === 404) {
+                  // Oracle workflow doesn't exist in the default branch yet; treat as not fired.
+                  core.info(`Oracle workflow "${workflowId}" not found (404); treating as not fired.`);
+                  break;
+                }
+                throw err;
+              }
 
-              const runs = res.data.workflow_runs || [];
               const match = runs.find((run) => run.head_sha === context.sha && run.event === context.eventName);
               if (match) {
                 fired = true;
