@@ -17,6 +17,8 @@ jobs:
     runs-on: ubuntu-slim
     steps:
       - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
 
       - name: Load pr-any filter
         id: load-pr-any

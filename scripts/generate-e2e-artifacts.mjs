@@ -93,6 +93,8 @@ function buildVerifyWorkflowYaml(specs) {
   lines.push("    runs-on: ubuntu-slim");
   lines.push("    steps:");
   lines.push("      - uses: actions/checkout@v4");
+  lines.push("        with:");
+  lines.push("          fetch-depth: 0");
 
   for (const spec of specs) {
     const id = spec.name;
