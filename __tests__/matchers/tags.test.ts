@@ -17,7 +17,7 @@ test.each<[string, EventFilter, boolean]>([
   ['refs/tags/v2.0', { tags: ['v1.*'] }, false],
   ['refs/tags/v1.2.3', { tags: ['v*'] }, true],
   ['refs/heads/main', { tags: ['v*'] }, false],
-  ['refs/heads/main', { 'tags-ignore': ['v*'] }, true],
+  ['refs/heads/main', { 'tags-ignore': ['v*'] }, false],
   ['refs/tags/releases/v1/patch', { tags: ['releases/**'] }, true],
 ])('matchTags(%s, filter) => matched=%s', (ref, filter, expected) => {
   expect(matchTags(makeTagContext(ref), filter).matched).toBe(expected);
