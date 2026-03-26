@@ -142,10 +142,13 @@ jobs:
             const sha = context.eventName === 'pull_request'
               ? context.payload.pull_request.head.sha
               : context.sha;
+            // Filter by event type so push-triggered and pull_request-triggered
+            // runs are not mixed together in the comparison.
             const { data } = await github.rest.actions.listWorkflowRunsForRepo({
               owner: context.repo.owner,
               repo: context.repo.repo,
               head_sha: sha,
+              event: context.eventName,
               per_page: 100,
             });
             const oracleRuns = new Set(
@@ -153,6 +156,7 @@ jobs:
                 .filter(r => r.name.startsWith('oracle-'))
                 .map(r => r.name.replace('oracle-', ''))
             );
+            core.info(`Event: ${context.eventName}, SHA: ${sha}, Oracle runs found: ${[...oracleRuns].join(', ') || '(none)'}`);
             const results = {
               'pr-any': '${{ steps.on-filter-pr-any.outputs.result }}',
               'pr-main': '${{ steps.on-filter-pr-main.outputs.result }}',

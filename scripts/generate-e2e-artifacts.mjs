@@ -135,10 +135,13 @@ function buildCompareScript(specs) {
   lines.push("const sha = context.eventName === 'pull_request'");
   lines.push('  ? context.payload.pull_request.head.sha');
   lines.push('  : context.sha;');
+  lines.push('// Filter by event type so push-triggered and pull_request-triggered');
+  lines.push('// runs are not mixed together in the comparison.');
   lines.push('const { data } = await github.rest.actions.listWorkflowRunsForRepo({');
   lines.push('  owner: context.repo.owner,');
   lines.push('  repo: context.repo.repo,');
   lines.push('  head_sha: sha,');
+  lines.push('  event: context.eventName,');
   lines.push('  per_page: 100,');
   lines.push('});');
   lines.push('const oracleRuns = new Set(');
@@ -146,6 +149,7 @@ function buildCompareScript(specs) {
   lines.push("    .filter(r => r.name.startsWith('oracle-'))");
   lines.push("    .map(r => r.name.replace('oracle-', ''))");
   lines.push(');');
+  lines.push("core.info(`Event: ${context.eventName}, SHA: ${sha}, Oracle runs found: ${[...oracleRuns].join(', ') || '(none)'}`);")
   lines.push('const results = {');
   for (const spec of specs) {
     lines.push(`  '${spec.name}': '\${{ steps.on-filter-${spec.name}.outputs.result }}',`);
