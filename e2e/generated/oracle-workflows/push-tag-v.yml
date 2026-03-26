@@ -1,0 +1,10 @@
+name: oracle-push-tag-v
+on:
+  push:
+    tags:
+      - v*
+jobs:
+  oracle:
+    runs-on: ubuntu-slim
+    steps:
+      - run: echo oracle workflow trigger definition

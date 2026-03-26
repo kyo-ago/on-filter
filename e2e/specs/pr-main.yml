@@ -1,0 +1,5 @@
+name: pr-main
+on:
+  pull_request:
+    branches:
+      - main

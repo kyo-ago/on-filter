@@ -1,0 +1,10 @@
+name: oracle-push-ignore-main
+on:
+  push:
+    branches-ignore:
+      - main
+jobs:
+  oracle:
+    runs-on: ubuntu-slim
+    steps:
+      - run: echo oracle workflow trigger definition

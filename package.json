@@ -12,7 +12,7 @@
     "all": "npm run format && npm run lint && npm run test && npm run build",
     "prepare": "husky",
     "e2e:generate": "node scripts/generate-e2e-artifacts.mjs",
-    "e2e:check": "npm run e2e:generate && git diff --exit-code -- e2e/generated"
+    "e2e:check": "npm run e2e:generate && git diff --exit-code -- e2e/generated .github/workflows/oracle-* .github/workflows/verify.yml .github/workflows/trigger-e2e.yml"
   },
   "repository": {
     "type": "git",

@@ -1,0 +1,10 @@
+name: oracle-push-paths-src
+on:
+  push:
+    paths:
+      - src/**
+jobs:
+  oracle:
+    runs-on: ubuntu-slim
+    steps:
+      - run: echo oracle workflow trigger definition

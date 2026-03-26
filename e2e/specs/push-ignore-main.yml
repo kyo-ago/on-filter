@@ -1,0 +1,5 @@
+name: push-ignore-main
+on:
+  push:
+    branches-ignore:
+      - main

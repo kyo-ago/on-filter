@@ -1,0 +1,5 @@
+name: push-paths-src
+on:
+  push:
+    paths:
+      - 'src/**'

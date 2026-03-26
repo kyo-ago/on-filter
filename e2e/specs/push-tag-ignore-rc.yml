@@ -1,0 +1,5 @@
+name: push-tag-ignore-rc
+on:
+  push:
+    tags-ignore:
+      - '*-rc*'

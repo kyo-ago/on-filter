@@ -1,0 +1,10 @@
+name: oracle-pr-types-sync
+on:
+  pull_request:
+    types:
+      - synchronize
+jobs:
+  oracle:
+    runs-on: ubuntu-slim
+    steps:
+      - run: echo oracle workflow trigger definition

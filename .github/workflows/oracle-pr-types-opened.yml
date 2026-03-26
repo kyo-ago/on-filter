@@ -1,0 +1,10 @@
+name: oracle-pr-types-opened
+on:
+  pull_request:
+    types:
+      - opened
+jobs:
+  oracle:
+    runs-on: ubuntu-slim
+    steps:
+      - run: echo oracle workflow trigger definition

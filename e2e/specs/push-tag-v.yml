@@ -1,0 +1,5 @@
+name: push-tag-v
+on:
+  push:
+    tags:
+      - 'v*'

@@ -1,0 +1,10 @@
+name: oracle-pr-any
+on:
+  pull_request:
+    branches:
+      - '**'
+jobs:
+  oracle:
+    runs-on: ubuntu-slim
+    steps:
+      - run: echo oracle workflow trigger definition

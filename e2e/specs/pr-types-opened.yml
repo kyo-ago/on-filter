@@ -1,0 +1,5 @@
+name: pr-types-opened
+on:
+  pull_request:
+    types:
+      - opened

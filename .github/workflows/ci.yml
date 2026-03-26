@@ -25,28 +25,3 @@ jobs:
             exit 1
           fi
 
-  integration-test:
-    runs-on: ubuntu-slim
-    steps:
-      - uses: actions/checkout@v4
-      - name: Load generated on-filter input
-        id: generated-on
-        run: |
-          {
-            echo 'yaml<<EOF'
-            cat e2e/generated/on-filter/push-main.yml
-            echo 'EOF'
-          } >> "$GITHUB_OUTPUT"
-      - name: Test push to main filter
-        uses: ./
-        id: push-main
-        with:
-          on: ${{ steps.generated-on.outputs.yaml }}
-      - name: Verify push-main result is a boolean string
-        run: |
-          result="${{ steps.push-main.outputs.result }}"
-          if [ "$result" != "true" ] && [ "$result" != "false" ]; then
-            echo "Unexpected result: $result"
-            exit 1
-          fi
-          echo "push-main result: $result"
