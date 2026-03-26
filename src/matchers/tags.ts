@@ -34,7 +34,7 @@ export function matchTags(context: ActionContext, filter: EventFilter): FilterRe
     if (tags) {
       return { matched: false, reason: 'Ref is not a tag but tags filter is specified' };
     }
-    return { matched: true, reason: 'Ref is not a tag and only tags-ignore is specified' };
+    return { matched: false, reason: 'Ref is not a tag but tags-ignore filter requires a tag push' };
   }
 
   core.debug(`Tag name: ${tagName}`);

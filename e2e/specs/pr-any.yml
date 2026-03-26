@@ -1,0 +1,5 @@
+name: pr-any
+on:
+  pull_request:
+    branches:
+      - '**'

@@ -1,0 +1,10 @@
+name: oracle-push-tag-ignore-rc
+on:
+  push:
+    tags-ignore:
+      - '*-rc*'
+jobs:
+  oracle:
+    runs-on: ubuntu-slim
+    steps:
+      - run: echo oracle workflow trigger definition

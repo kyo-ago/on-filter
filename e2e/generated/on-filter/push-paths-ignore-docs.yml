@@ -1,0 +1,4 @@
+push:
+  paths-ignore:
+    - docs/**
+    - '*.md'

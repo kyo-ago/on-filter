@@ -1,0 +1,5 @@
+name: pr-types-sync
+on:
+  pull_request:
+    types:
+      - synchronize

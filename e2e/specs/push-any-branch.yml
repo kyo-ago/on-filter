@@ -1,0 +1,5 @@
+name: push-any-branch
+on:
+  push:
+    branches:
+      - '**'
