@@ -8,6 +8,10 @@ on:
   pull_request:
     branches: ['**']
 
+permissions:
+  actions: read
+  contents: read
+
 jobs:
   verify:
     runs-on: ubuntu-slim

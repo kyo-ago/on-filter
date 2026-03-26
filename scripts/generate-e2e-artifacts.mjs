@@ -84,6 +84,10 @@ function buildVerifyWorkflowYaml(specs) {
   lines.push("  pull_request:");
   lines.push("    branches: ['**']");
   lines.push("");
+  lines.push("permissions:");
+  lines.push("  actions: read");
+  lines.push("  contents: read");
+  lines.push("");
   lines.push("jobs:");
   lines.push("  verify:");
   lines.push("    runs-on: ubuntu-slim");
