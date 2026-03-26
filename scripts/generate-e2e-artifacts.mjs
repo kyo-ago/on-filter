@@ -128,10 +128,15 @@ function buildVerifyWorkflowYaml(specs) {
 
 function buildCompareScript(specs) {
   const lines = [];
+  lines.push('// For pull_request events, context.sha is the merge commit SHA,');
+  lines.push('// but workflow runs use the PR head commit SHA as head_sha.');
+  lines.push("const sha = context.eventName === 'pull_request'");
+  lines.push('  ? context.payload.pull_request.head.sha');
+  lines.push('  : context.sha;');
   lines.push('const { data } = await github.rest.actions.listWorkflowRunsForRepo({');
   lines.push('  owner: context.repo.owner,');
   lines.push('  repo: context.repo.repo,');
-  lines.push('  head_sha: context.sha,');
+  lines.push('  head_sha: sha,');
   lines.push('  per_page: 100,');
   lines.push('});');
   lines.push('const oracleRuns = new Set(');
