@@ -1,5 +1,7 @@
 # on-filter
 
+[![CI](https://github.com/kyo-ago/on-filter/actions/workflows/ci.yml/badge.svg?branch=main)](https://github.com/kyo-ago/on-filter/actions/workflows/ci.yml)
+
 A GitHub Actions action that lets you use the standard `on` event syntax as a **job-level filter**.
 
 ## Overview
