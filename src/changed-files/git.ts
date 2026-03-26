@@ -18,13 +18,13 @@ export async function getChangedFilesFromGit(
   after: string
 ): Promise<string[]> {
   if (before === NULL_SHA || before === '') {
-    core.debug('New branch detected (before is null SHA), listing all files');
-    const output = await runGit(['ls-tree', '-r', '--name-only', after]);
+    core.debug('New branch detected (before is null SHA), using diff-tree for changed files');
+    const output = await runGit(['diff-tree', '--no-commit-id', '-r', '--name-only', after]);
     const files = output
       .trim()
       .split('\n')
       .filter((f) => f.length > 0);
-    core.debug(`All files in tree (${files.length}): ${JSON.stringify(files)}`);
+    core.debug(`Changed files from diff-tree (${files.length}): ${JSON.stringify(files)}`);
     return files;
   }
 
