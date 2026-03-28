@@ -16,7 +16,7 @@ jobs:
   verify:
     runs-on: ubuntu-slim
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@34e114876b0b11c390a56381ad16ebd13914f8d5 # v4.3.1
         with:
           fetch-depth: 0
 
@@ -134,7 +134,7 @@ jobs:
         run: sleep 60
 
       - name: Compare on-filter results with oracle workflows
-        uses: actions/github-script@v7
+        uses: actions/github-script@f28e40c7f34bde8b3046d885e986cb6290c5673b # v7.1.0
         with:
           script: |
             // For pull_request events, context.sha is the merge commit SHA,
