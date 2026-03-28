@@ -92,7 +92,7 @@ function buildVerifyWorkflowYaml(specs) {
   lines.push("  verify:");
   lines.push("    runs-on: ubuntu-slim");
   lines.push("    steps:");
-  lines.push("      - uses: actions/checkout@v4");
+  lines.push("      - uses: actions/checkout@34e114876b0b11c390a56381ad16ebd13914f8d5 # v4");
   lines.push("        with:");
   lines.push("          fetch-depth: 0");
 
@@ -115,7 +115,7 @@ function buildVerifyWorkflowYaml(specs) {
   lines.push('        run: sleep 60');
   lines.push('');
   lines.push('      - name: Compare on-filter results with oracle workflows');
-  lines.push('        uses: actions/github-script@v7');
+  lines.push('        uses: actions/github-script@f28e40c7f34bde8b3046d885e986cb6290c5673b # v7');
   lines.push('        with:');
   lines.push('          script: |');
 
@@ -183,12 +183,12 @@ function buildTriggerWorkflowYaml(specs) {
   lines.push("  trigger:");
   lines.push("    runs-on: ubuntu-slim");
   lines.push("    steps:");
-  lines.push("      - uses: actions/checkout@v4");
+  lines.push("      - uses: actions/checkout@34e114876b0b11c390a56381ad16ebd13914f8d5 # v4");
   lines.push("        with:");
   lines.push("          fetch-depth: 0");
   lines.push("");
   lines.push("      - name: Create GitHub App Token");
-  lines.push("        uses: actions/create-github-app-token@v1");
+  lines.push("        uses: actions/create-github-app-token@d72941d797fd3113feb6b93fd0dec494b13a2547 # v1");
   lines.push("        id: app-token");
   lines.push("        with:");
   lines.push("          app-id: ${{ secrets.E2E_APP_ID }}");
