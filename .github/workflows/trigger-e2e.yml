@@ -43,12 +43,14 @@ jobs:
       - name: "Trigger: push tag v*"
         run: |
           TAG="v0.0.0-e2e-${{ github.run_id }}"
+          git commit --allow-empty -m "e2e: push-tag-v (${{ github.run_id }})"
           git tag "$TAG"
           git push origin "$TAG"
 
       - name: "Trigger: push tag *-rc*"
         run: |
           TAG="0.0.0-rc-e2e-${{ github.run_id }}"
+          git commit --allow-empty -m "e2e: push-tag-rc (${{ github.run_id }})"
           git tag "$TAG"
           git push origin "$TAG"
 

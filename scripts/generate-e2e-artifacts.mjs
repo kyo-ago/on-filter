@@ -236,6 +236,7 @@ function buildTriggerWorkflowYaml(specs) {
     lines.push('      - name: "Trigger: push tag v*"');
     lines.push('        run: |');
     lines.push('          TAG="v0.0.0-e2e-${{ github.run_id }}"');
+    lines.push('          git commit --allow-empty -m "e2e: push-tag-v (${{ github.run_id }})"');
     lines.push('          git tag "$TAG"');
     lines.push('          git push origin "$TAG"');
   }
@@ -245,6 +246,7 @@ function buildTriggerWorkflowYaml(specs) {
     lines.push('      - name: "Trigger: push tag *-rc*"');
     lines.push('        run: |');
     lines.push('          TAG="0.0.0-rc-e2e-${{ github.run_id }}"');
+    lines.push('          git commit --allow-empty -m "e2e: push-tag-rc (${{ github.run_id }})"');
     lines.push('          git tag "$TAG"');
     lines.push('          git push origin "$TAG"');
   }
