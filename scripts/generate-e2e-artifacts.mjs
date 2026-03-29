@@ -186,6 +186,7 @@ function buildTriggerWorkflowYaml(specs) {
   lines.push("      - uses: actions/checkout@v4");
   lines.push("        with:");
   lines.push("          fetch-depth: 0");
+  lines.push("          persist-credentials: false");
   lines.push("");
   lines.push("      - name: Create GitHub App Token");
   lines.push("        uses: actions/create-github-app-token@v1");
