@@ -5,6 +5,7 @@ on:
 
 jobs:
   tagpr:
+    if: "!startsWith(github.event.head_commit.message, 'e2e:')"
     runs-on: ubuntu-latest
     permissions:
       contents: write
