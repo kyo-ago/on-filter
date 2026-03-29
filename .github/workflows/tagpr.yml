@@ -13,10 +13,16 @@ jobs:
       tag: ${{ steps.tagpr.outputs.tag }}
     steps:
       - uses: actions/checkout@34e114876b0b11c390a56381ad16ebd13914f8d5 # v4.3.1
+      - name: Create GitHub App Token
+        uses: actions/create-github-app-token@d72941d797fd3113feb6b93fd0dec494b13a2547 # v1.12.0
+        id: app-token
+        with:
+          app-id: ${{ secrets.E2E_APP_ID }}
+          private-key: ${{ secrets.E2E_APP_PRIVATE_KEY }}
       - uses: Songmu/tagpr@b3fb89424646b06c8aa460f50307c60b6a541425 # v1.17.1
         id: tagpr
         env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          GITHUB_TOKEN: ${{ steps.app-token.outputs.token }}
 
   update-semver:
     needs: tagpr
