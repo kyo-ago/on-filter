@@ -75,7 +75,7 @@ export async function matchPaths(
     if (paths) {
       return { matched: false, reason: 'No changed files and paths filter is specified' };
     }
-    return { matched: true, reason: 'No changed files and only paths-ignore is specified' };
+    return { matched: false, reason: 'No changed files and paths-ignore is specified' };
   }
 
   if (paths) {

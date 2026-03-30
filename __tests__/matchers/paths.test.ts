@@ -99,14 +99,14 @@ describe('matchPaths', () => {
       expect(result.matched).toBe(false);
     });
 
-    it('passes when no changed files and paths-ignore', async () => {
+    it('does not match when no changed files and paths-ignore', async () => {
       mockedGitFiles.mockResolvedValue([]);
       const result = await matchPaths(
         makePushContext(),
         { 'paths-ignore': ['docs/**'] },
         'token'
       );
-      expect(result.matched).toBe(true);
+      expect(result.matched).toBe(false);
     });
   });
 
