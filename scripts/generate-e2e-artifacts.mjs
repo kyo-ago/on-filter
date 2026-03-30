@@ -92,7 +92,7 @@ function buildVerifyWorkflowYaml(specs) {
   lines.push("  verify:");
   lines.push("    runs-on: ubuntu-slim");
   lines.push("    steps:");
-  lines.push("      - uses: actions/checkout@34e114876b0b11c390a56381ad16ebd13914f8d5 # v4.3.1");
+  lines.push("      - uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd # v6.0.2");
   lines.push("        with:");
   lines.push("          fetch-depth: 0");
 
@@ -183,7 +183,7 @@ function buildTriggerWorkflowYaml(specs) {
   lines.push("  trigger:");
   lines.push("    runs-on: ubuntu-slim");
   lines.push("    steps:");
-  lines.push("      - uses: actions/checkout@34e114876b0b11c390a56381ad16ebd13914f8d5 # v4.3.1");
+  lines.push("      - uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd # v6.0.2");
   lines.push("        with:");
   lines.push("          fetch-depth: 0");
   lines.push("          persist-credentials: false");
