@@ -6,7 +6,7 @@ on:
 jobs:
   tagpr:
     if: github.event.head_commit.author.email != 'e2e-bot@example.com'
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-slim
     permissions:
       contents: write
       pull-requests: write
@@ -22,7 +22,7 @@ jobs:
   update-semver:
     needs: tagpr
     if: needs.tagpr.outputs.tag != ''
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-slim
     permissions:
       contents: write
     steps:
