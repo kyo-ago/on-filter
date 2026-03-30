@@ -108,6 +108,68 @@ describe('matchPaths', () => {
       );
       expect(result.matched).toBe(false);
     });
+
+    it('does not match when all files match multiple ignore patterns', async () => {
+      mockedGitFiles.mockResolvedValue(['docs/guide.md', 'README.md']);
+      const result = await matchPaths(
+        makePushContext(),
+        { 'paths-ignore': ['docs/**', '*.md'] },
+        'token'
+      );
+      expect(result.matched).toBe(false);
+    });
+
+    it('matches when some files do not match any ignore pattern', async () => {
+      mockedGitFiles.mockResolvedValue(['docs/guide.md', 'src/main.ts', 'README.md']);
+      const result = await matchPaths(
+        makePushContext(),
+        { 'paths-ignore': ['docs/**', '*.md'] },
+        'token'
+      );
+      expect(result.matched).toBe(true);
+    });
+  });
+
+  describe('pull_request with paths-ignore', () => {
+    it('matches when not all files are ignored', async () => {
+      mockedApiFiles.mockResolvedValue(['src/main.ts', 'docs/readme.md']);
+      const result = await matchPaths(
+        makePrContext(),
+        { 'paths-ignore': ['docs/**'] },
+        'token'
+      );
+      expect(result.matched).toBe(true);
+    });
+
+    it('does not match when all files are ignored', async () => {
+      mockedApiFiles.mockResolvedValue(['docs/readme.md', 'docs/guide.md']);
+      const result = await matchPaths(
+        makePrContext(),
+        { 'paths-ignore': ['docs/**'] },
+        'token'
+      );
+      expect(result.matched).toBe(false);
+    });
+
+    it('does not match when no changed files and paths-ignore', async () => {
+      mockedApiFiles.mockResolvedValue([]);
+      const result = await matchPaths(
+        makePrContext(),
+        { 'paths-ignore': ['docs/**'] },
+        'token'
+      );
+      expect(result.matched).toBe(false);
+    });
+
+    it('does not match when no changed files and paths', async () => {
+      mockedApiFiles.mockResolvedValue([]);
+      const result = await matchPaths(
+        makePrContext(),
+        { paths: ['src/**'] },
+        'token'
+      );
+      expect(result.matched).toBe(false);
+    });
   });
 
   describe('negation patterns', () => {
