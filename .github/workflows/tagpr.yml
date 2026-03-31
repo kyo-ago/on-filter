@@ -6,14 +6,14 @@ on:
 jobs:
   tagpr:
     if: github.event.head_commit.author.email != 'e2e-bot@example.com'
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-slim
     permissions:
       contents: write
       pull-requests: write
     outputs:
       tag: ${{ steps.tagpr.outputs.tag }}
     steps:
-      - uses: actions/checkout@34e114876b0b11c390a56381ad16ebd13914f8d5 # v4.3.1
+      - uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd # v6.0.2
       - uses: Songmu/tagpr@b3fb89424646b06c8aa460f50307c60b6a541425 # v1.17.1
         id: tagpr
         env:
@@ -22,7 +22,7 @@ jobs:
   update-semver:
     needs: tagpr
     if: needs.tagpr.outputs.tag != ''
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-slim
     permissions:
       contents: write
     steps:
