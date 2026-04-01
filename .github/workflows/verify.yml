@@ -30,6 +30,26 @@ jobs:
         with:
           on: ${{ steps.load-pr-any.outputs.yaml }}
 
+      - name: Load pr-branches-ignore-main filter
+        id: load-pr-branches-ignore-main
+        run: |
+          { echo 'yaml<<EOF'; cat e2e/generated/on-filter/pr-branches-ignore-main.yml; echo 'EOF'; } >> "$GITHUB_OUTPUT"
+      - name: Run on-filter pr-branches-ignore-main
+        uses: ./
+        id: on-filter-pr-branches-ignore-main
+        with:
+          on: ${{ steps.load-pr-branches-ignore-main.outputs.yaml }}
+
+      - name: Load pr-main-types-opened filter
+        id: load-pr-main-types-opened
+        run: |
+          { echo 'yaml<<EOF'; cat e2e/generated/on-filter/pr-main-types-opened.yml; echo 'EOF'; } >> "$GITHUB_OUTPUT"
+      - name: Run on-filter pr-main-types-opened
+        uses: ./
+        id: on-filter-pr-main-types-opened
+        with:
+          on: ${{ steps.load-pr-main-types-opened.outputs.yaml }}
+
       - name: Load pr-main filter
         id: load-pr-main
         run: |
@@ -39,6 +59,36 @@ jobs:
         id: on-filter-pr-main
         with:
           on: ${{ steps.load-pr-main.outputs.yaml }}
+
+      - name: Load pr-paths-ignore-docs filter
+        id: load-pr-paths-ignore-docs
+        run: |
+          { echo 'yaml<<EOF'; cat e2e/generated/on-filter/pr-paths-ignore-docs.yml; echo 'EOF'; } >> "$GITHUB_OUTPUT"
+      - name: Run on-filter pr-paths-ignore-docs
+        uses: ./
+        id: on-filter-pr-paths-ignore-docs
+        with:
+          on: ${{ steps.load-pr-paths-ignore-docs.outputs.yaml }}
+
+      - name: Load pr-paths-src filter
+        id: load-pr-paths-src
+        run: |
+          { echo 'yaml<<EOF'; cat e2e/generated/on-filter/pr-paths-src.yml; echo 'EOF'; } >> "$GITHUB_OUTPUT"
+      - name: Run on-filter pr-paths-src
+        uses: ./
+        id: on-filter-pr-paths-src
+        with:
+          on: ${{ steps.load-pr-paths-src.outputs.yaml }}
+
+      - name: Load pr-types-multiple filter
+        id: load-pr-types-multiple
+        run: |
+          { echo 'yaml<<EOF'; cat e2e/generated/on-filter/pr-types-multiple.yml; echo 'EOF'; } >> "$GITHUB_OUTPUT"
+      - name: Run on-filter pr-types-multiple
+        uses: ./
+        id: on-filter-pr-types-multiple
+        with:
+          on: ${{ steps.load-pr-types-multiple.outputs.yaml }}
 
       - name: Load pr-types-opened filter
         id: load-pr-types-opened
@@ -79,6 +129,16 @@ jobs:
         id: on-filter-push-ignore-main
         with:
           on: ${{ steps.load-push-ignore-main.outputs.yaml }}
+
+      - name: Load push-main-paths-src filter
+        id: load-push-main-paths-src
+        run: |
+          { echo 'yaml<<EOF'; cat e2e/generated/on-filter/push-main-paths-src.yml; echo 'EOF'; } >> "$GITHUB_OUTPUT"
+      - name: Run on-filter push-main-paths-src
+        uses: ./
+        id: on-filter-push-main-paths-src
+        with:
+          on: ${{ steps.load-push-main-paths-src.outputs.yaml }}
 
       - name: Load push-main filter
         id: load-push-main
@@ -159,11 +219,17 @@ jobs:
             core.info(`Event: ${context.eventName}, SHA: ${sha}, Oracle runs found: ${[...oracleRuns].join(', ') || '(none)'}`);
             const results = {
               'pr-any': '${{ steps.on-filter-pr-any.outputs.result }}',
+              'pr-branches-ignore-main': '${{ steps.on-filter-pr-branches-ignore-main.outputs.result }}',
+              'pr-main-types-opened': '${{ steps.on-filter-pr-main-types-opened.outputs.result }}',
               'pr-main': '${{ steps.on-filter-pr-main.outputs.result }}',
+              'pr-paths-ignore-docs': '${{ steps.on-filter-pr-paths-ignore-docs.outputs.result }}',
+              'pr-paths-src': '${{ steps.on-filter-pr-paths-src.outputs.result }}',
+              'pr-types-multiple': '${{ steps.on-filter-pr-types-multiple.outputs.result }}',
               'pr-types-opened': '${{ steps.on-filter-pr-types-opened.outputs.result }}',
               'pr-types-sync': '${{ steps.on-filter-pr-types-sync.outputs.result }}',
               'push-any-branch': '${{ steps.on-filter-push-any-branch.outputs.result }}',
               'push-ignore-main': '${{ steps.on-filter-push-ignore-main.outputs.result }}',
+              'push-main-paths-src': '${{ steps.on-filter-push-main-paths-src.outputs.result }}',
               'push-main': '${{ steps.on-filter-push-main.outputs.result }}',
               'push-paths-ignore-docs': '${{ steps.on-filter-push-paths-ignore-docs.outputs.result }}',
               'push-paths-src': '${{ steps.on-filter-push-paths-src.outputs.result }}',

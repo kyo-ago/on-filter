@@ -1,0 +1,11 @@
+name: oracle-pr-paths-ignore-docs
+on:
+  pull_request:
+    paths-ignore:
+      - docs/**
+      - '*.md'
+jobs:
+  oracle:
+    runs-on: ubuntu-slim
+    steps:
+      - run: echo oracle workflow trigger definition

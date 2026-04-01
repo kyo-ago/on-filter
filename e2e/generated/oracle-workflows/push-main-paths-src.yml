@@ -1,0 +1,12 @@
+name: oracle-push-main-paths-src
+on:
+  push:
+    branches:
+      - main
+    paths:
+      - src/**
+jobs:
+  oracle:
+    runs-on: ubuntu-slim
+    steps:
+      - run: echo oracle workflow trigger definition

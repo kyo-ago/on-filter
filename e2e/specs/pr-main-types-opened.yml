@@ -1,0 +1,7 @@
+name: pr-main-types-opened
+on:
+  pull_request:
+    branches:
+      - main
+    types:
+      - opened

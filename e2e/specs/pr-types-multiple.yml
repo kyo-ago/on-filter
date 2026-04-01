@@ -1,0 +1,6 @@
+name: pr-types-multiple
+on:
+  pull_request:
+    types:
+      - opened
+      - synchronize

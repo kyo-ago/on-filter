@@ -1,0 +1,5 @@
+push:
+  branches:
+    - main
+  paths:
+    - src/**

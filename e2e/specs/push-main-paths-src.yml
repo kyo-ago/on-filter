@@ -1,0 +1,7 @@
+name: push-main-paths-src
+on:
+  push:
+    branches:
+      - main
+    paths:
+      - 'src/**'

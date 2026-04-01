@@ -211,12 +211,24 @@ function buildTriggerWorkflowYaml(specs) {
   const needsPathsDocs = specs.some((s) => hasPushPathsIgnore(s.on));
   const needsPrOpened = specs.some((s) => hasPullRequest(s.on));
   const needsPrSync = specs.some((s) => hasPrTypesSync(s.on));
+  const needsPushMainWithPaths = specs.some((s) => hasPushBranchesWithPaths(s.on));
+  const needsPrWithFileChanges = specs.some((s) => hasPrPaths(s.on));
 
   if (needsPushMain) {
     lines.push('');
     lines.push('      - name: "Trigger: push to main"');
     lines.push('        run: |');
     lines.push('          git commit --allow-empty -m "e2e: push-main (${{ github.run_id }})"');
+    lines.push('          git push origin HEAD:main');
+  }
+
+  if (needsPushMainWithPaths) {
+    lines.push('');
+    lines.push('      - name: "Trigger: push to main with src/ changes"');
+    lines.push('        run: |');
+    lines.push('          echo "// e2e test ${{ github.run_id }}" > src/.e2e-test-file-main');
+    lines.push('          git add src/.e2e-test-file-main');
+    lines.push('          git commit -m "e2e: push-main-paths (${{ github.run_id }})"');
     lines.push('          git push origin HEAD:main');
   }
 
@@ -286,7 +298,13 @@ function buildTriggerWorkflowYaml(specs) {
     lines.push('        run: |');
     lines.push('          BRANCH="e2e/pr-${{ github.run_id }}"');
     lines.push('          git checkout -b "$BRANCH"');
-    lines.push('          git commit --allow-empty -m "e2e: pr-opened (${{ github.run_id }})"');
+    if (needsPrWithFileChanges) {
+      lines.push('          echo "// e2e test ${{ github.run_id }}" > src/.e2e-test-file-pr');
+      lines.push('          git add src/.e2e-test-file-pr');
+      lines.push('          git commit -m "e2e: pr-opened (${{ github.run_id }})"');
+    } else {
+      lines.push('          git commit --allow-empty -m "e2e: pr-opened (${{ github.run_id }})"');
+    }
     lines.push('          git push -u origin "$BRANCH"');
     lines.push('          gh pr create --base main --head "$BRANCH" \\');
     lines.push('            --title "E2E test: ${{ github.run_id }}" \\');
@@ -370,6 +388,14 @@ function hasPrTypesSync(onBlock) {
     onBlock.pull_request.types &&
     onBlock.pull_request.types.includes('synchronize')
   );
+}
+
+function hasPushBranchesWithPaths(onBlock) {
+  return onBlock.push && onBlock.push.branches && (onBlock.push.paths || onBlock.push['paths-ignore']);
+}
+
+function hasPrPaths(onBlock) {
+  return onBlock.pull_request && (onBlock.pull_request.paths || onBlock.pull_request['paths-ignore']);
 }
 
 function cleanDir(dirPath, keepFiles) {
