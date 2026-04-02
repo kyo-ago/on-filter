@@ -80,7 +80,6 @@ function buildVerifyWorkflowYaml(specs) {
   lines.push("on:");
   lines.push("  push:");
   lines.push("    branches: ['main']");
-  lines.push("    tags: ['**']");
   lines.push("  pull_request:");
   lines.push("    branches: ['**']");
   lines.push("");
