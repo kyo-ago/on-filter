@@ -189,7 +189,7 @@ function buildTriggerWorkflowYaml(specs) {
   lines.push("          persist-credentials: false");
   lines.push("");
   lines.push("      - name: Create GitHub App Token");
-  lines.push("        uses: actions/create-github-app-token@d72941d797fd3113feb6b93fd0dec494b13a2547 # v1.12.0");
+  lines.push("        uses: actions/create-github-app-token@f8d387b68d61c58ab83c6c016672934102569859 # v3.0.0");
   lines.push("        id: app-token");
   lines.push("        with:");
   lines.push("          app-id: ${{ secrets.E2E_APP_ID }}");
