@@ -1,0 +1,10 @@
+name: oracle-pr-branches-ignore-main
+on:
+  pull_request:
+    branches-ignore:
+      - main
+jobs:
+  oracle:
+    runs-on: ubuntu-slim
+    steps:
+      - run: echo oracle workflow trigger definition

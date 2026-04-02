@@ -1,0 +1,5 @@
+name: pr-paths-src
+on:
+  pull_request:
+    paths:
+      - 'src/**'

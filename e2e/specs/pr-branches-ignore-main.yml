@@ -1,0 +1,5 @@
+name: pr-branches-ignore-main
+on:
+  pull_request:
+    branches-ignore:
+      - main

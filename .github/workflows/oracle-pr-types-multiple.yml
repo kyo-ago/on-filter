@@ -1,0 +1,11 @@
+name: oracle-pr-types-multiple
+on:
+  pull_request:
+    types:
+      - opened
+      - synchronize
+jobs:
+  oracle:
+    runs-on: ubuntu-slim
+    steps:
+      - run: echo oracle workflow trigger definition
